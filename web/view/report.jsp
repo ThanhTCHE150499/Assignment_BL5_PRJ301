@@ -74,6 +74,7 @@
                 <td>Hours</td>
                 <td>Days</td>
                 <td>Salary</td>
+                <td>Action</td>
             </tr>
             <c:forEach items="${requestScope.emps}" var="e">
                 <tr>
@@ -94,6 +95,8 @@
                     </c:forEach>
                     <td>${e.getWorkingHours()}</td>
                     <td>${e.getWorkingDays()}</td>
+                    <td>${e.getWorkingHours() * 35000}</td>
+                    <td><a href="#">Edit</a><br><a href="EmployeeController?eid=${e.id}">Delete</a></td>
                 </tr>
             </c:forEach>
         </table>
