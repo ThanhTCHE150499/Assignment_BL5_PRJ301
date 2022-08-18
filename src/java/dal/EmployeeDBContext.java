@@ -62,4 +62,63 @@ public class EmployeeDBContext extends DBContext {
         }
         return emps;
     }
+    
+    public void delete(Employee e) {
+        try {
+
+            connection.setAutoCommit(false);
+            String sql = "DELETE FROM [TimeSheet]\n"
+                    + "      WHERE eid = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, e.getId());
+            stm.executeUpdate();
+
+            String sql1 = "DELETE FROM [Employee]\n"
+                    + "      WHERE eid = ?";
+            PreparedStatement stm1 = connection.prepareStatement(sql1);
+            stm1.setInt(1, e.getId());
+            stm1.executeUpdate();
+            connection.commit();
+
+        } catch (SQLException ex) {
+            try {
+                Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                connection.rollback(); // nếu xuất hiện lỗi thì xoá sạch các thay đổi
+                // và trở về trạng thái trước khi có thay đổi 
+            } catch (SQLException ex1) {
+                Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    public Employee getEmployeeById(int id) {
+        Employee employee = null;
+        try {
+            String sql = "SELECT [eid]\n"
+                    + "      ,[ename]\n"
+                    + "      ,[erole]\n"
+                    + "  FROM [Employee]\n"
+                    + "  WHERE eid = ?";
+
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                employee = new Employee();
+                employee.setId(rs.getInt("eid"));
+                employee.setName(rs.getString("ename"));
+                employee.setRole(rs.getString("erole"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return employee;
+    }
 }
