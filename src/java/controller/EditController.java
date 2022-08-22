@@ -6,22 +6,19 @@
 package controller;
 
 import dal.EmployeeDBContext;
-import helper.DateTimeHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Date;
 import model.Employee;
-import model.ViewDate;
 
 /**
  *
+ * @author Admin
  */
-public class TimesheetReportController extends HttpServlet {
+public class EditController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,10 +27,7 @@ public class TimesheetReportController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        
-    } 
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -46,17 +40,11 @@ public class TimesheetReportController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        Date today =new Date();
-        today = DateTimeHelper.removeTime(today);
-        int dayOfMonth = DateTimeHelper.getDayOfMonth(today);
-        Date begin = DateTimeHelper.addDays(today, (dayOfMonth-1)*-1);
-        Date end = DateTimeHelper.addDays(DateTimeHelper.addMonths(begin, 1),-1);
-        EmployeeDBContext db = new EmployeeDBContext();
-        ArrayList<Employee> emps = db.getEmps(begin, end);
-        ArrayList<ViewDate> dates = DateTimeHelper.getDates(begin, end);
-        request.setAttribute("emps", emps);
-        request.setAttribute("dates", dates);
-        request.getRequestDispatcher("view/report.jsp").forward(request, response);
+        int eid = Integer.parseInt(request.getParameter("eid"));
+        EmployeeDBContext eDB = new EmployeeDBContext();
+        Employee employee = eDB.getEmployeeById(eid);
+        request.setAttribute("employee", employee);
+        request.getRequestDispatcher("view/edit.jsp").forward(request, response);
     } 
 
     /** 
@@ -69,9 +57,21 @@ public class TimesheetReportController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       int eid = Integer.parseInt(request.getParameter("eid"));
+        String ename = request.getParameter("ename");
+        String erole = request.getParameter("erole");
+        EmployeeDBContext eDB = new EmployeeDBContext();
+        eDB.updateEmployee(eid, ename, erole);
+        response.sendRedirect("report");
     }
-    
 
+    /** 
+     * Returns a short description of the servlet.
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
 
 }

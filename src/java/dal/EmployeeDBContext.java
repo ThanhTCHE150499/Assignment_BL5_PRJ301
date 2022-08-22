@@ -62,7 +62,53 @@ public class EmployeeDBContext extends DBContext {
         }
         return emps;
     }
-    
+
+    public void create(Employee e) {
+        try {
+            connection.setAutoCommit(false);
+            String sql = "INSERT INTO [Employee]\n"
+                    + "           ([ename]\n"
+                    + "           ,[erole])\n"
+                    + "     VALUES\n"
+                    + "           (?, ?)";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, e.getName());
+            stm.setString(2, e.getRole());
+            stm.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+//    public void edit(Employee e) {
+//        try {
+//            connection.setAutoCommit(false);
+//            String sql = "UPDATE [Employee]\n"
+//                    + "   SET [ename] = <ename, varchar(150),>\n"
+//                    + "      ,[erole] = <erole, nchar(255),>\n"
+//                    + " WHERE [eid] = <eid, int,>";
+//            PreparedStatement stm = connection.prepareStatement(sql);
+//            stm.setString(1, e.getName());
+//            stm.setString(2, e.getRole());
+//            stm.execute();
+//            
+//            String sql1 = "UPDATE [TimeSheet]\n"
+//                    + "   SET [checkin] = <checkin, datetime,>\n"
+//                    + "      ,[checkout] = <checkout, datetime,>\n"
+//                    + " WHERE [eid] = <eid, int,>";
+//            PreparedStatement stm1 = connection.prepareStatement(sql1);
+//            ResultSet rs = stm.executeQuery();
+//            TimeSheet t = new TimeSheet();
+//            t.setTid(tid);
+//            t.setCheckin(rs.getTimestamp("checkin"));
+//            t.setCheckout(rs.getTimestamp("checkout"));
+//            stm1.execute();
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
     public void delete(Employee e) {
         try {
 
@@ -110,7 +156,7 @@ public class EmployeeDBContext extends DBContext {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 employee = new Employee();
                 employee.setId(rs.getInt("eid"));
                 employee.setName(rs.getString("ename"));
@@ -120,5 +166,22 @@ public class EmployeeDBContext extends DBContext {
             Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return employee;
+    }
+
+    public void updateEmployee(int eid, String ename, String erole) {
+         try {
+        String sql = "UPDATE [Employee]\n"
+                + "   SET [ename] = ?\n"
+                + "      ,[erole] = ?\n"
+                + " WHERE eid = ?";
+       
+            PreparedStatement stm = connection.prepareCall(sql);
+            stm.setString(1, ename);
+            stm.setString(2, erole);
+            stm.setInt(3, eid);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -32,6 +32,18 @@
         <servlet-name>TimesheetReportController</servlet-name>
         <servlet-class>controller.TimesheetReportController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EmployeeController</servlet-name>
+        <servlet-class>controller.EmployeeController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditController</servlet-name>
+        <servlet-class>controller.EditController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddWorkingDate</servlet-name>
+        <servlet-class>controller.AddWorkingDate</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LogController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -63,6 +75,18 @@
     <servlet-mapping>
         <servlet-name>TimesheetReportController</servlet-name>
         <url-pattern>/report</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmployeeController</servlet-name>
+        <url-pattern>/EmployeeController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditController</servlet-name>
+        <url-pattern>/EditController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddWorkingDate</servlet-name>
+        <url-pattern>/AddWorkingDate</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

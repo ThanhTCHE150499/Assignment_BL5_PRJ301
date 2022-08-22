@@ -15,6 +15,14 @@ public class Employee {
     private String name;
     private ArrayList<TimeSheet> timesheets = new ArrayList<>();
     private String role ;
+
+    public Employee(String name, String role) {
+        this.name = name;
+        this.role = role;
+    }
+
+    public Employee() {
+    }
     
     public float getWorkingHours()
     {
